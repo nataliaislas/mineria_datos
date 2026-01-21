@@ -64,7 +64,7 @@ El Machine Learning **invierte** este proceso. En lugar de suministrar las regla
 
 Y dejamos que la computadora **descubra** las reglas por sí misma.
 
-#### Definición de Tom Mitchell (1997)
+#### Definición de aprendizaje de máquina
 
 > "Se dice que un programa de computadora aprende de la experiencia $E$ con respecto a alguna clase de tareas $T$ y medida de rendimiento $P$, si su desempeño en las tareas en $T$, medido por $P$, mejora con la experiencia $E$."
 
@@ -72,13 +72,13 @@ Para el ingeniero de negocios, descomponer esta definición es vital para **iden
 
 | Componente | Definición | Ejemplo: Detección de Fraude | Ejemplo: Valoración Inmobiliaria |
 |------------|------------|------------------------------|----------------------------------|
-| **Tarea ($T$)** | El problema de negocio que intentamos resolver | Clasificar una transacción como "Fraudulenta" o "Legítima" | Predecir el precio de venta de una propiedad |
+| **Tarea ($T$)** | Labor que el sistema debe ejecutar| Clasificar una transacción como "Fraudulenta" o "Legítima" | Predecir el precio de venta de una propiedad |
 | **Experiencia ($E$)** | Los datos históricos que el sistema utiliza para entrenarse | Millones de transacciones pasadas con sus etiquetas reales | Historial de ventas de casas con características y ubicación |
 | **Rendimiento ($P$)** | La métrica cuantitativa que define el éxito | Precisión, Recall, o Costo Financiero del Fraude | Error Cuadrático Medio (diferencia precio predicho vs. real) |
 
 #### Implicación Estratégica
 
-La definición de Mitchell revela algo poderoso: **el Machine Learning es un activo que se aprecia con el uso**. A diferencia del software tradicional que se deprecia si no se actualiza, un sistema de ML teóricamente se vuelve más inteligente y valioso a medida que la organización acumula más experiencia ($E$).
+La definición revela algo poderoso: **el Machine Learning es un activo que se aprecia con el uso**. A diferencia del software tradicional que se deprecia si no se actualiza, un sistema de ML teóricamente se vuelve más inteligente y valioso a medida que la organización acumula más experiencia ($E$).
 
 ### La Analogía del Jardinero vs. el Arquitecto
 
@@ -99,17 +99,12 @@ Como ingenieros de negocios, nuestro objetivo es convertirnos en **"Jardineros d
 
 ### La Hipótesis de la Función Universal
 
-En el mundo de los negocios, asumimos implícitamente que existe una relación causal entre variables operativas y resultados financieros:
-
-- "Gasto en Publicidad" influye en "Ventas"
-- "Satisfacción del Cliente" influye en "Tasa de Retención"
-- "Características del Producto" influyen en "Precio de Mercado"
-
-Matemáticamente, postulamos la existencia de una función ideal —llamémosla la "Función de Dios" o $f(x)$:
+Suponemos que existe una función $f$ :
 
 $$y = f(x)$$
 
 Donde:
+
 - $x$ es el vector de variables de entrada (precio, día de la semana, clima, competidores)
 - $y$ es la variable objetivo que queremos predecir (demanda, ventas, probabilidad de compra)
 
@@ -124,11 +119,13 @@ Por lo tanto, la realidad se expresa como:
 
 $$y = f(x) + \epsilon$$
 
-Donde $\epsilon$ (épsilon) representa el **error irreducible** o ruido aleatorio (e.g., un cliente decidió no comprar porque se sintió mal esa mañana, un evento impredecible).
+Donde:
+
+- $\epsilon$ (épsilon) sulee representar el **error irreducible** o ruido aleatorio. Sin embargo, también puede representar el efecto de variables que no hemos medido.
 
 ### El Objetivo: Encontrar la Función Estimada
 
-El objetivo del Machine Learning es utilizar datos históricos para construir una **función estimada**, denotada como $\hat{f}(x)$ (leída como "f-sombrero"), que imite a $f(x)$ lo suficientemente bien como para ser útil:
+El objetivo del Machine Learning es utilizar datos históricos para construir una **función estimada**, denotada como $\hat{f}(x)$, que imite a $f(x)$ lo suficientemente bien como para ser útil:
 
 $$y \approx \hat{f}(x)$$
 
@@ -246,12 +243,7 @@ El sesgo ocurre cuando el modelo hace **suposiciones demasiado simplistas** sobr
 
 **Concepto:** Un modelo con alto sesgo es "cerrado de mente". Ignora la complejidad de los datos y fuerza una solución simple.
 
-- *Ejemplo técnico*: Intentar ajustar una línea recta a datos que claramente siguen una curva parabólica
 - *Síntoma (Underfitting/Subajuste)*: El modelo tiene un rendimiento pobre tanto en datos de entrenamiento como en datos de prueba. No ha aprendido la relación real
-
-**Analogía de Negocios:**
-
-Un gerente que cree dogmáticamente que *"Bajar precios siempre aumenta ventas"* tiene un alto sesgo. Su modelo mental es demasiado simple y fallará en mercados de lujo donde el precio alto es señal de calidad.
 
 ### La Varianza (Variance): El Error de la Complejidad
 
@@ -261,9 +253,9 @@ La varianza es la sensibilidad del modelo a las **fluctuaciones aleatorias** (ru
 
 - *Síntoma (Overfitting/Sobreajuste)*: El modelo tiene un rendimiento espectacular en datos de entrenamiento (quizás 99% de precisión) pero falla miserablemente en datos nuevos. No generaliza; solo recuerda
 
-**Analogía de Negocios:**
+#### Ejemplo gráfico:
 
-Un analista junior que ve que las ventas cayeron un martes lluvioso y concluye una regla compleja: *"Nunca vender en martes si la humedad supera el 80%"*. Está modelando la coincidencia (ruido), no la causa raíz. Esta estrategia fallará en el futuro.
+![Ejemplo gráfico](imgs/bias_variance.png)
 
 ### El Trade-off Sesgo-Varianza
 
@@ -272,9 +264,9 @@ En el aprendizaje automático, existe una tensión inevitable:
 - **Modelo más complejo** → Reduce sesgo (se ajusta mejor) pero aumenta varianza (más inestable)
 - **Modelo más simple** → Reduce varianza (más estable) pero aumenta sesgo (demasiado simple)
 
-El objetivo del ingeniero en la fase de **Evaluación** de CRISP-DM es encontrar el punto óptimo donde la suma del sesgo y la varianza es mínima.
+El objetivo es encontrar el punto óptimo donde la suma del sesgo y la varianza es mínima.
 
-![Sesgo vs Varianza](imgs/bias_variance.png)
+![Sesgo vs Varianza](imgs/bias_variance_tradeoff.png)
 
 Esto se logra mediante técnicas como:
 
@@ -364,10 +356,10 @@ Para conectar con la fase de **Evaluación** de CRISP-DM:
 - Promedio de los errores absolutos
 - Más robusto a valores atípicos que RMSE
 
-### Limitaciones
+### Limitaciones (y no tantas limitaciones)
 
-- **Asume linealidad**: Si la relación es no lineal, el modelo será inadecuado
-- **Sensible a outliers**: Un solo valor extremo puede distorsionar toda la línea
+- **Asume linealidad**: Si la relación es no lineal, el modelo será inadecuado. ¿Sobre qué asume la linealidad?
+- **Sensible a outliers**: Un solo valor extremo puede distorsionar toda la línea. ¿Qué es lo que hace que esta sensibilidad sea tan alta?
 - **Multicolinealidad**: Si las variables independientes están altamente correlacionadas, los coeficientes se vuelven inestables
 
 ---
@@ -450,15 +442,33 @@ Para la fase de **Evaluación** de CRISP-DM:
 
 **2. Métricas Derivadas**
 
-- **Accuracy (Exactitud)**: $(TP + TN) / \text{Total}$ — ¿Qué porcentaje de predicciones fueron correctas?
-- **Precision (Precisión)**: $TP / (TP + FP)$ — De lo que predijimos como positivo, ¿cuánto realmente lo era?
-- **Recall (Sensibilidad)**: $TP / (TP + FN)$ — De todos los casos positivos reales, ¿cuántos detectamos?
+- **Accuracy (Exactitud)**: ¿Qué porcentaje de predicciones fueron correctas?
+$$\dfrac{TP + TN}{\text{Total}}$$
+- **Tasa de falsos positivos**: De todas las veces que la realidad era **negativa**, ¿qué porcentaje de veces el modelo se equivocó y dijo **positivo**?
+$$\dfrac{FP}{\text{FP + TP}} = \dfrac{FP}{\textbf{Real}\text{: Negativo}}$$
+- **Precision (Precisión)**: De lo que predijimos como positivo, ¿cuánto realmente lo era?
+$$\dfrac{TP}{TP + FP} = \dfrac{TP}{\textbf{Predicho}\text{: Positivo}}$$
+- **Recall (Sensibilidad)**: De todos los casos positivos reales, ¿cuántos detectamos?
+$$\dfrac{TP}{TP + FN} = \dfrac{TP}{\textbf{Real}\text{: Positivo}}$$
+
+![Precisión y Recall](./imgs/precisionrecall.png)
+
 - **F1-Score**: Media armónica de Precision y Recall
 
-**3. Curva ROC y AUC**
+**3. Curva ROC**
 
-- **ROC (Receiver Operating Characteristic)**: Grafica Recall vs. Tasa de Falsos Positivos
-- **AUC (Area Under the Curve)**: Resume el rendimiento en un solo número (0-1, donde 1 es perfecto)
+Básicamente una gráfica que nos dice qué tan bueno es un modelo para distinguir entre dos categorías bajo diferentes umbrales.
+
+- ¿Qué dibuja?
+    - Eje Y: Sensibilidad
+    - Eje X: Tasa de falsos positivos
+- ¿Qué varía? Los puntos de corte
+
+![Curva ROC: Clasisificador Perfecto](./imgs/roc_perfect.png)
+![Curva ROC: Clasisificador Aleatorio](./imgs/roc_random.png)
+![Curva ROC: Ejemplos reales](./imgs/roc_example.png)
+
+
 
 ---
 
