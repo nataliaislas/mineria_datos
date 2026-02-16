@@ -362,6 +362,94 @@ Para conectar con la fase de **Evaluación** de CRISP-DM:
 - **Sensible a outliers**: Un solo valor extremo puede distorsionar toda la línea. ¿Qué es lo que hace que esta sensibilidad sea tan alta?
 - **Multicolinealidad**: Si las variables independientes están altamente correlacionadas, los coeficientes se vuelven inestables
 
+### Regularización: Ridge y Lasso
+
+Las técnicas de **regularización** son herramientas fundamentales para combatir el **sobreajuste (overfitting)** en regresión lineal, conectándose directamente con el trade-off sesgo-varianza discutido anteriormente.
+
+#### El Problema: Overfitting en Regresión Lineal
+
+Cuando tenemos muchas variables predictoras (alta dimensionalidad) o multicolinealidad, el método de Mínimos Cuadrados Ordinarios (OLS) puede producir modelos que:
+
+- Se ajustan perfectamente a los datos de entrenamiento
+- Tienen coeficientes $\beta$ extremadamente grandes y erráticos
+- Generalizan muy mal a nuevos datos (alta varianza)
+
+La regularización resuelve esto penalizando la complejidad del modelo.
+
+#### Regresión Ridge (L2)
+
+**La Ecuación:**
+
+Ridge modifica la función de costo agregando un término de penalización proporcional al **cuadrado** de los coeficientes:
+
+$$\text{Minimizar: } \sum_{i=1}^{n} (y_{\text{real}}^{(i)} - y_{\text{predicho}}^{(i)})^2 + \lambda \sum_{j=1}^{p} \beta_j^2$$
+
+Donde:
+
+- El primer término es el **error estándar** (SSE) que ya conocíamos
+- El segundo término $\lambda \sum_{j=1}^{p} \beta_j^2$ es la **penalización L2**
+- $\lambda$ (lambda) es el **parámetro de regularización** que controla la intensidad de la penalización
+  - $\lambda = 0$ → Regresión lineal estándar (sin penalización)
+  - $\lambda$ muy grande → Fuerza todos los coeficientes hacia cero
+
+**Utilidad de Ridge:**
+
+1. **Reduce Varianza**: Al penalizar coeficientes grandes, el modelo se vuelve más estable y generaliza mejor
+2. **Maneja Multicolinealidad**: Cuando las variables están correlacionadas, Ridge distribuye el peso entre ellas en lugar de asignar valores erráticos
+3. **Conserva Todas las Variables**: Ridge reduce los coeficientes pero **nunca los lleva exactamente a cero**. Todas las variables permanecen en el modelo
+4. **Ajusta el Trade-off Sesgo-Varianza**: Al aumentar $\lambda$, aumentamos el sesgo ligeramente pero reducimos drásticamente la varianza
+
+**Interpretación de Negocio:**
+
+Ridge es ideal cuando creemos que **todas las variables tienen algún efecto**, aunque sea pequeño, y queremos un modelo más robusto a cambio de un poco más de sesgo.
+
+#### Regresión Lasso (L1)
+
+**La Ecuación:**
+
+Lasso utiliza una penalización proporcional al **valor absoluto** de los coeficientes:
+
+$$\text{Minimizar: } \sum_{i=1}^{n} (y_{\text{real}}^{(i)} - y_{\text{predicho}}^{(i)})^2 + \lambda \sum_{j=1}^{p} |\beta_j|$$
+
+La única diferencia con Ridge es que usa $|\beta_j|$ (penalización L1) en lugar de $\beta_j^2$ (penalización L2).
+
+**Utilidad de Lasso:**
+
+1. **Selección Automática de Variables**: Lasso puede forzar coeficientes **exactamente a cero**, eliminando variables irrelevantes del modelo
+2. **Interpretabilidad**: Al producir modelos más simples (con menos variables), facilita la explicación a stakeholders de negocio
+3. **Reduce Varianza**: Similar a Ridge, estabiliza el modelo frente al sobreajuste
+4. **Feature Engineering Automático**: Actúa como un filtro, identificando las variables más importantes
+
+**Interpretación de Negocio:**
+
+Lasso es preferible cuando sospechamos que **solo un subconjunto de variables es realmente relevante** y queremos que el algoritmo identifique cuáles son, produciendo un modelo más simple y explicable.
+
+#### Comparación Ridge vs. Lasso
+
+| Característica | Ridge (L2) | Lasso (L1) |
+|----------------|-----------|-----------|
+| **Penalización** | $\lambda \sum \beta_j^2$ | $\lambda \sum \|\beta_j\|$ |
+| **Selección de Variables** | No (reduce pero no elimina) | Sí (puede forzar a cero) |
+| **Interpretabilidad** | Media (todas las variables) | Alta (modelo más simple) |
+| **Multicolinealidad** | Maneja muy bien | Selecciona arbitrariamente una |
+| **Uso Típico** | Todas las variables importan | Identificar variables clave |
+| **Conexión Sesgo-Varianza** | Aumenta sesgo, reduce varianza | Aumenta sesgo, reduce varianza |
+
+#### Elastic Net: Lo Mejor de Ambos Mundos
+
+En la práctica, existe una técnica que combina ambas penalizaciones:
+
+$$\text{Minimizar: } \text{SSE} + \lambda_1 \sum |\beta_j| + \lambda_2 \sum \beta_j^2$$
+
+Elastic Net es útil cuando tenemos muchas variables correlacionadas y queremos tanto selección como estabilidad.
+
+#### Selección del Parámetro $\lambda$
+
+El valor óptimo de $\lambda$ se determina mediante **Validación Cruzada** (la técnica mencionada en el trade-off sesgo-varianza):
+
+1. Probamos múltiples valores de $\lambda$ (e.g., 0.001, 0.01, 0.1, 1, 10, 100)
+2. Para cada valor, evaluamos el error en datos de validación
+3. Seleccionamos el $\lambda$ que minimiza el error de generalización
 ---
 
 ## Regresión Logística: Clasificación y Probabilidad
